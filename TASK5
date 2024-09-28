@@ -1,0 +1,332 @@
+#include <iostream>
+#include <vector>
+#include <list>
+#include <queue>
+
+using namespace std;
+
+// ------------------------- Linked List -------------------------
+struct ListNode {
+    int data;
+    ListNode* next;
+    ListNode(int val) : data(val), next(nullptr) {}
+};
+
+class LinkedList {
+private:
+    ListNode* head;
+
+public:
+    LinkedList() : head(nullptr) {}
+
+    void insert(int val) {
+        ListNode* newNode = new ListNode(val);
+        if (!head) {
+            head = newNode;
+        } else {
+            ListNode* temp = head;
+            while (temp->next) {
+                temp = temp->next;
+            }
+            temp->next = newNode;
+        }
+        cout << "Inserted " << val << " into the linked list." << endl;
+    }
+
+    void deleteNode(int val) {
+        if (!head) return;
+
+        if (head->data == val) {
+            ListNode* temp = head;
+            head = head->next;
+            delete temp;
+            cout << "Deleted " << val << " from the linked list." << endl;
+            return;
+        }
+
+        ListNode* temp = head;
+        while (temp->next && temp->next->data != val) {
+            temp = temp->next;
+        }
+
+        if (temp->next) {
+            ListNode* delNode = temp->next;
+            temp->next = temp->next->next;
+            delete delNode;
+            cout << "Deleted " << val << " from the linked list." << endl;
+        } else {
+            cout << val << " not found in the linked list." << endl;
+        }
+    }
+
+    void search(int val) {
+        ListNode* temp = head;
+        while (temp) {
+            if (temp->data == val) {
+                cout << "Value " << val << " found in the linked list." << endl;
+                return;
+            }
+            temp = temp->next;
+        }
+        cout << "Value " << val << " not found in the linked list." << endl;
+    }
+
+    void display() {
+        ListNode* temp = head;
+        cout << "Linked List: ";
+        while (temp) {
+            cout << temp->data << " -> ";
+            temp = temp->next;
+        }
+        cout << "NULL" << endl;
+    }
+};
+
+// ------------------------- Binary Search Tree -------------------------
+struct TreeNode {
+    int data;
+    TreeNode* left;
+    TreeNode* right;
+    TreeNode(int val) : data(val), left(nullptr), right(nullptr) {}
+};
+
+class BinarySearchTree {
+private:
+    TreeNode* root;
+
+    TreeNode* insert(TreeNode* node, int val) {
+        if (!node) return new TreeNode(val);
+        if (val < node->data) node->left = insert(node->left, val);
+        else if (val > node->data) node->right = insert(node->right, val);
+        return node;
+    }
+
+    TreeNode* deleteNode(TreeNode* node, int val) {
+        if (!node) return nullptr;
+        if (val < node->data) node->left = deleteNode(node->left, val);
+        else if (val > node->data) node->right = deleteNode(node->right, val);
+        else {
+            // Node with one child or no child
+            if (!node->left) {
+                TreeNode* temp = node->right;
+                delete node;
+                return temp;
+            } else if (!node->right) {
+                TreeNode* temp = node->left;
+                delete node;
+                return temp;
+            }
+            // Node with two children
+            TreeNode* temp = node->right;
+            while (temp->left) temp = temp->left;
+            node->data = temp->data;
+            node->right = deleteNode(node->right, temp->data);
+        }
+        return node;
+    }
+
+    bool search(TreeNode* node, int val) {
+        if (!node) return false;
+        if (node->data == val) return true;
+        if (val < node->data) return search(node->left, val);
+        return search(node->right, val);
+    }
+
+    void inorder(TreeNode* node) {
+        if (node) {
+            inorder(node->left);
+            cout << node->data << " ";
+            inorder(node->right);
+        }
+    }
+
+public:
+    BinarySearchTree() : root(nullptr) {}
+
+    void insert(int val) {
+        root = insert(root, val);
+        cout << "Inserted " << val << " into the binary search tree." << endl;
+    }
+
+    void deleteNode(int val) {
+        root = deleteNode(root, val);
+        cout << "Deleted " << val << " from the binary search tree." << endl;
+    }
+
+    void search(int val) {
+        if (search(root, val)) {
+            cout << "Value " << val << " found in the binary search tree." << endl;
+        } else {
+            cout << "Value " << val << " not found in the binary search tree." << endl;
+        }
+    }
+
+    void display() {
+        cout << "Inorder Traversal of BST: ";
+        inorder(root);
+        cout << endl;
+    }
+};
+
+// ------------------------- Graph -------------------------
+class Graph {
+private:
+    int vertices;
+    vector<list<int>> adjList;
+
+public:
+    Graph(int v) : vertices(v), adjList(v) {}
+
+    void addEdge(int src, int dest) {
+        adjList[src].push_back(dest);
+        adjList[dest].push_back(src);  // Undirected Graph
+        cout << "Edge added between " << src << " and " << dest << endl;
+    }
+
+    void display() {
+        cout << "Graph adjacency list:" << endl;
+        for (int i = 0; i < vertices; ++i) {
+            cout << i << ": ";
+            for (auto adj : adjList[i]) {
+                cout << adj << " ";
+            }
+            cout << endl;
+        }
+    }
+};
+
+// ------------------------- Main Program -------------------------
+int main() {
+    LinkedList ll;
+    BinarySearchTree bst;
+    Graph* graph = nullptr;
+
+    int choice;
+
+    do {
+        cout << "\nChoose Data Structure:\n";
+        cout << "1. Linked List\n2. Binary Search Tree\n3. Graph\n4. Exit\n";
+        cin >> choice;
+
+        switch (choice) {
+            case 1: {
+                int ll_choice;
+                do {
+                    cout << "\nLinked List Operations:\n";
+                    cout << "1. Insert\n2. Delete\n3. Search\n4. Display\n5. Back to main menu\n";
+                    cin >> ll_choice;
+                    switch (ll_choice) {
+                        case 1: {
+                            int value;
+                            cout << "Enter value to insert: ";
+                            cin >> value;
+                            ll.insert(value);
+                            break;
+                        }
+                        case 2: {
+                            int value;
+                            cout << "Enter value to delete: ";
+                            cin >> value;
+                            ll.deleteNode(value);
+                            break;
+                        }
+                        case 3: {
+                            int value;
+                            cout << "Enter value to search: ";
+                            cin >> value;
+                            ll.search(value);
+                            break;
+                        }
+                        case 4:
+                            ll.display();
+                            break;
+                        case 5:
+                            break;
+                        default:
+                            cout << "Invalid choice!" << endl;
+                    }
+                } while (ll_choice != 5);
+                break;
+            }
+            case 2: {
+                int bst_choice;
+                do {
+                    cout << "\nBinary Search Tree Operations:\n";
+                    cout << "1. Insert\n2. Delete\n3. Search\n4. Display (Inorder)\n5. Back to main menu\n";
+                    cin >> bst_choice;
+                    switch (bst_choice) {
+                        case 1: {
+                            int value;
+                            cout << "Enter value to insert: ";
+                            cin >> value;
+                            bst.insert(value);
+                            break;
+                        }
+                        case 2: {
+                            int value;
+                            cout << "Enter value to delete: ";
+                            cin >> value;
+                            bst.deleteNode(value);
+                            break;
+                        }
+                        case 3: {
+                            int value;
+                            cout << "Enter value to search: ";
+                            cin >> value;
+                            bst.search(value);
+                            break;
+                        }
+                        case 4:
+                            bst.display();
+                            break;
+                        case 5:
+                            break;
+                        default:
+                            cout << "Invalid choice!" << endl;
+                    }
+                } while (bst_choice != 5);
+                break;
+            }
+            case 3: {
+                if (!graph) {
+                    int v;
+                    cout << "Enter the number of vertices for the graph: ";
+                    cin >> v;
+                    graph = new Graph(v);
+                }
+                int graph_choice;
+                do {
+                    cout << "\nGraph Operations:\n";
+                    cout << "1. Add Edge\n2. Display Graph\n3. Back to main menu\n";
+                    cin >> graph_choice;
+                    switch (graph_choice) {
+                        case 1: {
+                            int src, dest;
+                            cout << "Enter source and destination vertices: ";
+                            cin >> src >> dest;
+                            graph->addEdge(src, dest);
+                            break;
+                        }
+                        case 2:
+                            graph->display();
+                            break;
+                        case 3:
+                            break;
+                        default:
+                            cout << "Invalid choice!" << endl;
+                    }
+                } while (graph_choice != 3);
+                break;
+            }
+            case 4:
+                cout << "Exiting program..." << endl;
+                break;
+            default:
+                cout << "Invalid choice! Please try again." << endl;
+        }
+    } while (choice != 4);
+
+    delete graph; // Clean up dynamically allocated graph
+
+    return 0;
+}
