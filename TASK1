@@ -1,0 +1,75 @@
+#include <iostream>
+#include <string>
+using namespace std;
+
+struct Question {
+    string questionText;
+    string choices[4];
+    char correctAnswer;
+};
+
+// Function to ask a question and return if the answer is correct
+bool askQuestion(Question q) {
+    char answer;
+    
+    cout << q.questionText << endl;
+    for (int i = 0; i < 4; i++) {
+        cout << char('A' + i) << ". " << q.choices[i] << endl;
+    }
+
+    cout << "Your answer (A/B/C/D): ";
+    cin >> answer;
+    
+    // Convert answer to uppercase in case user enters lowercase
+    answer = toupper(answer);
+    
+    if (answer == q.correctAnswer) {
+        cout << "Correct!" << endl;
+        return true;
+    } else {
+        cout << "Wrong! The correct answer was " << q.correctAnswer << "." << endl;
+        return false;
+    }
+}
+
+int main() {
+    // Array of questions
+    Question quiz[10] = {
+        {"Which movie won the Academy Award for Best Picture in 1994?", {"Forrest Gump","The Shawshank Redemption","Pulp Fiction","Schindler's List"}, 'A'},
+        {"Who directed the movie Inception?", {"Steven Spielberg", "Martin Scorsese", "Christopher Nolan", "Quentin Tarantino"}, 'C'},
+        {"What is the main theme of the movie The Matrix?", {"Time travel", "Space exploration", "Superheroes", "Virtual reality"}, 'D'},
+        {"In which year was Titanic released?", {"1995", "1997", "1999", "2000"}, 'B'},
+        {"What is the highest-grossing film of all time (as of 2024)?", {"Avengers: Endgame", "Titanic", " Avatar", "Star Wars: The Force Awakens"}, 'C'},
+        {"Which movie features a character named Gollum?", {"The Chronicles of Narnia","The Lord of the Rings","Harry Potter","The Hobbit"}, 'B'},
+        {"Which animated film features the song Let It Go?", {"Moana","Tangled","Frozen","Zootopia"}, 'C'},
+        {"Who is the first superhero introduced in the Marvel Cinematic Universe?", {"Iron Man","Thor","Captain America","Hulk"}, 'C'},
+        {"In Furious 7, which song is used as a tribute to Paul Walker?", {"See You Again","We Don't Talk Anymore","Love Me Like You Do","One Call Away"}, 'A'},
+        {"What is the name of Harry Potter’s pet owl?", {"Crookshanks","Hedwig","Fawkes","Scabbers"}, 'B'}
+    };
+
+    int score = 0;  // Track the score
+    int totalQuestions = 10;
+
+    // Loop through the questions
+    for (int i = 0; i < totalQuestions; i++) {
+        cout << "\nQuestion " << i + 1 << ":\n";
+        if (askQuestion(quiz[i])) {
+            score++;
+        }
+    }
+
+    // Display final score
+    cout << "\nQuiz finished!" << endl;
+    cout << "Your final score is: " << score << " out of " << totalQuestions << endl;
+
+    // Provide feedback based on the score
+    if (score == totalQuestions) {
+        cout << "Excellent! You got all answers right!" << endl;
+    } else if (score >= totalQuestions * 0.6) {
+        cout << "Good job! You got most answers right." << endl;
+    } else {
+        cout << "Keep practicing, you'll get better!" << endl;
+    }
+
+    return 0;
+}
