@@ -1,0 +1,171 @@
+#include <iostream>
+#include <vector>
+#include <string>
+
+using namespace std;
+
+struct Student {
+    int id;
+    string name;
+    float grades[3];  // grades for three subjects
+};
+
+// Function prototypes
+void addStudent(vector<Student>& students);
+void editStudent(vector<Student>& students);
+void deleteStudent(vector<Student>& students);
+void displayStudents(const vector<Student>& students);
+void calculateGrades(const vector<Student>& students);
+
+// Main menu function
+void menu(vector<Student>& students) {
+    int choice;
+    do {
+        cout << "\nStudent Management System" << endl;
+        cout << "1. Add Student" << endl;
+        cout << "2. Edit Student" << endl;
+        cout << "3. Delete Student" << endl;
+        cout << "4. Display Students" << endl;
+        cout << "5. Calculate Grades" << endl;
+        cout << "6. Exit" << endl;
+        cout << "Enter your choice: ";
+        cin >> choice;
+
+        switch (choice) {
+            case 1:
+                addStudent(students);
+                break;
+            case 2:
+                editStudent(students);
+                break;
+            case 3:
+                deleteStudent(students);
+                break;
+            case 4:
+                displayStudents(students);
+                break;
+            case 5:
+                calculateGrades(students);
+                break;
+            case 6:
+                cout << "Exiting system..." << endl;
+                break;
+            default:
+                cout << "Invalid choice! Please try again." << endl;
+        }
+    } while (choice != 6);
+}
+
+// Function to add a student
+void addStudent(vector<Student>& students) {
+    Student newStudent;
+    cout << "\nEnter Student ID: ";
+    cin >> newStudent.id;
+    cin.ignore();  // clear the input buffer
+    cout << "Enter Student Name: ";
+    getline(cin, newStudent.name);
+    
+    // Input grades for 3 subjects
+    for (int i = 0; i < 3; i++) {
+        cout << "Enter grade for subject " << i + 1 << ": ";
+        cin >> newStudent.grades[i];
+    }
+
+    students.push_back(newStudent);
+    cout << "Student added successfully!" << endl;
+}
+
+// Function to edit a student's details
+void editStudent(vector<Student>& students) {
+    int id;
+    cout << "\nEnter Student ID to edit: ";
+    cin >> id;
+
+    for (auto& student : students) {
+        if (student.id == id) {
+            cout << "Editing details for " << student.name << endl;
+            cout << "Enter new Student Name: ";
+            cin.ignore();
+            getline(cin, student.name);
+            
+            // Update grades for 3 subjects
+            for (int i = 0; i < 3; i++) {
+                cout << "Enter new grade for subject " << i + 1 << ": ";
+                cin >> student.grades[i];
+            }
+
+            cout << "Student details updated successfully!" << endl;
+            return;
+        }
+    }
+    cout << "Student ID not found!" << endl;
+}
+
+// Function to delete a student
+void deleteStudent(vector<Student>& students) {
+    int id;
+    cout << "\nEnter Student ID to delete: ";
+    cin >> id;
+
+    for (size_t i = 0; i < students.size(); i++) {
+        if (students[i].id == id) {
+            students.erase(students.begin() + i);
+            cout << "Student deleted successfully!" << endl;
+            return;
+        }
+    }
+    cout << "Student ID not found!" << endl;
+}
+
+// Function to display all students
+void displayStudents(const vector<Student>& students) {
+    if (students.empty()) {
+        cout << "No students found!" << endl;
+        return;
+    }
+
+    cout << "\nList of Students:" << endl;
+    for (const auto& student : students) {
+        cout << "ID: " << student.id << ", Name: " << student.name << endl;
+        cout << "Grades: ";
+        for (float grade : student.grades) {
+            cout << grade << " ";
+        }
+        cout << endl;
+    }
+}
+
+// Function to calculate grades for each student
+void calculateGrades(const vector<Student>& students) {
+    if (students.empty()) {
+        cout << "No students found!" << endl;
+        return;
+    }
+
+    for (const auto& student : students) {
+        float total = 0;
+        for (float grade : student.grades) {
+            total += grade;
+        }
+        float average = total / 3;
+        cout << "\nStudent Name: " << student.name << endl;
+        cout << "Total Marks: " << total << ", Average: " << average << endl;
+
+        if (average >= 90) {
+            cout << "Grade: A" << endl;
+        } else if (average >= 75) {
+            cout << "Grade: B" << endl;
+        } else if (average >= 50) {
+            cout << "Grade: C" << endl;
+        } else {
+            cout << "Grade: F" << endl;
+        }
+    }
+}
+
+int main() {
+    vector<Student> students;  // dynamic list of students
+    menu(students);  // Start the main menu
+
+    return 0;
+}
