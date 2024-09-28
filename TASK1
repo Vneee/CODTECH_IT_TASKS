@@ -1,0 +1,63 @@
+
+#include <iostream>
+using namespace std;
+
+// Function to convert Celsius to Fahrenheit and Kelvin
+void fromCelsius(double temp) {
+    cout << "Fahrenheit: " << (temp * 9 / 5) + 32 << endl;
+    cout << "Kelvin: " << temp + 273.15 << endl;
+}
+
+// Function to convert Fahrenheit to Celsius and Kelvin
+void fromFahrenheit(double temp) {
+    cout << "Celsius: " << (temp - 32) * 5 / 9 << endl;
+    cout << "Kelvin: " << (temp - 32) * 5 / 9 + 273.15 << endl;
+}
+
+// Function to convert Kelvin to Celsius and Fahrenheit
+void fromKelvin(double temp) {
+    cout << "Celsius: " << temp - 273.15 << endl;
+    cout << "Fahrenheit: " << (temp - 273.15) * 9 / 5 + 32 << endl;
+}
+
+int main() {
+    double temperature;
+    int inputScale, outputScale;
+
+    cout << "Temperature Converter" << endl;
+    cout << "1. Celsius\n2. Fahrenheit\n3. Kelvin" << endl;
+
+    // Get input temperature scale
+    cout << "Enter the temperature scale (1 for Celsius, 2 for Fahrenheit, 3 for Kelvin): ";
+    cin >> inputScale;
+
+    // Get temperature value
+    cout << "Enter the temperature: ";
+    cin >> temperature;
+
+    // Get output scale
+    cout << "Convert to (1 for Celsius, 2 for Fahrenheit, 3 for Kelvin): ";
+    cin >> outputScale;
+
+    // Perform conversion based on input and output scale
+    if (inputScale == 1) { // Celsius input
+        if (outputScale == 2) fromCelsius(temperature);
+        else if (outputScale == 3) fromCelsius(temperature);
+        else cout << "Invalid output scale." << endl;
+    }
+    else if (inputScale == 2) { // Fahrenheit input
+        if (outputScale == 1) fromFahrenheit(temperature);
+        else if (outputScale == 3) fromFahrenheit(temperature);
+        else cout << "Invalid output scale." << endl;
+    }
+    else if (inputScale == 3) { // Kelvin input
+        if (outputScale == 1) fromKelvin(temperature);
+        else if (outputScale == 2) fromKelvin(temperature);
+        else cout << "Invalid output scale." << endl;
+    }
+    else {
+        cout << "Invalid input scale." << endl;
+    }
+
+    return 0;
+}
