@@ -12,13 +12,15 @@ Duration: August to September 2024
 
 This repository contains several C++ projects that showcase the implementation of various data structures, algorithms, and games. Each program focuses on a specific topic, from multiple-choice quizzes to dynamic data structures.
 
-# Table of Contents
+## Table of Contents
 
-Quiz Game
-Temperature Converter
-Student Management System
-Data Structures Implementation
-Text-Based Adventure Game
+- [Quiz Game](#quiz-game)
+- [Temperature Converter](#temperature-converter)
+- [Student Management System](#student-management-system)
+- [Data Structures Implementation](#data-structures-implementation)
+- [Text-Based Adventure Game](#text-based-adventure-game)
+
+
 
 ## Quiz Game
 
