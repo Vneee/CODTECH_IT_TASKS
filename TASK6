@@ -1,0 +1,138 @@
+#include <iostream>
+#include <cstdlib>
+#include <ctime>
+
+using namespace std;
+
+class Player {
+public:
+    int health;
+    int score;
+
+    Player() {
+        health = 100;
+        score = 0;
+    }
+
+    void takeDamage(int damage) {
+        health -= damage;
+        if (health < 0) health = 0;
+    }
+
+    void heal(int healAmount) {
+        health += healAmount;
+        if (health > 100) health = 100;
+    }
+
+    void increaseScore(int points) {
+        score += points;
+    }
+
+    bool isAlive() {
+        return health > 0;
+    }
+};
+
+class Room {
+public:
+    string description;
+    bool hasEnemy;
+    bool hasTreasure;
+
+    Room(string desc, bool enemy, bool treasure) {
+        description = desc;
+        hasEnemy = enemy;
+        hasTreasure = treasure;
+    }
+
+    void exploreRoom(Player& player) {
+        cout << "You enter the room. " << description << endl;
+
+        if (hasEnemy) {
+            int damage = rand() % 30 + 1;  // Random damage between 1 and 30
+            cout << "An enemy attacks you! You take " << damage << " damage." << endl;
+            player.takeDamage(damage);
+        }
+
+        if (hasTreasure) {
+            int treasurePoints = rand() % 100 + 1;  // Random treasure points between 1 and 100
+            cout << "You found a treasure chest! You gain " << treasurePoints << " points." << endl;
+            player.increaseScore(treasurePoints);
+        }
+    }
+};
+
+// Function to display player's stats
+void displayPlayerStats(Player& player) {
+    cout << "Player Stats: " << endl;
+    cout << "Health: " << player.health << endl;
+    cout << "Score: " << player.score << endl;
+    cout << endl;
+}
+
+int main() {
+    srand(time(0));  // Seed for random numbers
+
+    Player player;
+    bool gameRunning = true;
+
+    // Define rooms with random elements
+    Room rooms[] = {
+        Room("It's a dark room with eerie silence.", true, false),
+        Room("The room is filled with gold and treasure.", false, true),
+        Room("You hear footsteps behind you.", true, true),
+        Room("The room is empty, but you feel uneasy.", false, false),
+        Room("A dragon appears!", true, true)
+    };
+
+    int numRooms = sizeof(rooms) / sizeof(rooms[0]);
+    int currentRoom = 0;
+
+    cout << "Welcome to the Dungeon Adventure!" << endl;
+
+    // Game loop
+    while (gameRunning && player.isAlive()) {
+        displayPlayerStats(player);
+        cout << "You are in Room " << currentRoom + 1 << " of " << numRooms << "." << endl;
+        rooms[currentRoom].exploreRoom(player);
+
+        if (!player.isAlive()) {
+            cout << "You have died. Game Over!" << endl;
+            break;
+        }
+
+        cout << "\nWhat would you like to do?" << endl;
+        cout << "1. Move to the next room" << endl;
+        cout << "2. Heal (+20 health)" << endl;
+        cout << "3. Exit the game" << endl;
+
+        int choice;
+        cin >> choice;
+
+        switch (choice) {
+            case 1:
+                currentRoom++;
+                if (currentRoom >= numRooms) {
+                    cout << "You have explored all the rooms! Congratulations!" << endl;
+                    gameRunning = false;
+                }
+                break;
+            case 2:
+                player.heal(20);
+                cout << "You heal yourself for 20 health points." << endl;
+                break;
+            case 3:
+                cout << "Exiting the game..." << endl;
+                gameRunning = false;
+                break;
+            default:
+                cout << "Invalid choice!" << endl;
+                break;
+        }
+    }
+
+    cout << "Your final score is: " << player.score << endl;
+    cout << "Thanks for playing!" << endl;
+
+    return 0;
+}
